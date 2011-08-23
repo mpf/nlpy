@@ -9,10 +9,10 @@ D. Orban <dominique.orban@gerad.ca>
 
 DOCLINES = __doc__.split("\n")
 
-#import setuptools   # To enable 'python setup.py develop'
 import os
 import sys
 
+# Uncomment the following import if your prefer and in-place build.
 try:
     #import setuptools   # To enable 'python setup.py develop'
     pass
@@ -58,8 +58,8 @@ def configuration(parent_package='',top_path=None):
 
 def setup_package():
 
-    from numpy.distutils.core import setup, Extension
-    from numpy.distutils.misc_util import Configuration
+    from numpy.distutils.core import setup
+    #from numpy.distutils.misc_util import Configuration
 
     old_path = os.getcwd()
     local_path = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -76,8 +76,8 @@ def setup_package():
             maintainer_email = "dominique.orban@gerad.ca",
             description = DOCLINES[0],
             long_description = "\n".join(DOCLINES[2:]),
-            url = "",
-            download_url = "",
+            url = "http://nlpy.sf.net",
+            download_url = "https://github.com/dpo/nlpy",
             license = 'LGPL',
             classifiers=filter(None, CLASSIFIERS.split('\n')),
             platforms = ["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],

@@ -28,7 +28,7 @@ class RegQPInteriorPointSolver:
 
     def __init__(self, qp, **kwargs):
         """
-        Solve a convex quadratic program of the form
+        Solve a convex quadratic program of the form::
 
            minimize    c' x + 1/2 x' Q x
            subject to  A1 x + A2 s = b,                                 (QP)
@@ -188,15 +188,15 @@ class RegQPInteriorPointSolver:
         Equilibrate the constraint matrix of the linear program. Equilibration
         is done by first dividing every row by its largest element in absolute
         value and then by dividing every column by its largest element in
-        absolute value. In effect the original problem
+        absolute value. In effect the original problem::
 
-          minimize c' x + 1/2 x' Q x
-          subject to  A1 x + A2 s = b, x >= 0
+            minimize c' x + 1/2 x' Q x
+            subject to  A1 x + A2 s = b, x >= 0
 
-        is converted to
+        is converted to::
 
-          minimize (Cc)' x + 1/2 x' (CQC') x
-          subject to  R A1 C x + R A2 C s = Rb, x >= 0,
+            minimize (Cc)' x + 1/2 x' (CQC') x
+            subject to  R A1 C x + R A2 C s = Rb, x >= 0,
 
         where the diagonal matrices R and C operate row and column scaling
         respectively.
@@ -308,28 +308,27 @@ class RegQPInteriorPointSolver:
         interior-point method. Accepted input keyword arguments are
 
         :keywords:
+
           :itermax:  The maximum allowed number of iterations (default: 10n)
-
           :tolerance:  Stopping tolerance (default: 1.0e-6)
-
           :PredictorCorrector:  Use the predictor-corrector method
                                 (default: `True`). If set to `False`, a variant
                                 of the long-step method is used. The long-step
                                 method is generally slower and less robust.
 
-        Upon exit, the following members of the class instance are set:
+        :returns:
 
-        * x..............final iterate
-        * y..............final value of the Lagrange multipliers associated
-                         to A1 x + A2 s = b
-        * z..............final value of the Lagrange multipliers associated
-                         to s>=0
-        * obj_value......final cost
-        * iter...........total number of iterations
-        * kktResid.......final relative residual
-        * solve_time.....time to solve the QP
-        * status.........string describing the exit status.
-        * short_status...short version of status, used for printing.
+            :x:            final iterate
+            :y:            final value of the Lagrange multipliers associated
+                           to `A1 x + A2 s = b`
+            :z:            final value of the Lagrange multipliers associated
+                           to `s >= 0`
+            :obj_value:    final cost
+            :iter:         total number of iterations
+            :kktResid:     final relative residual
+            :solve_time:   time to solve the QP
+            :status:       string describing the exit status.
+            :short_status: short version of status, used for printing.
 
         """
         qp = self.qp
@@ -653,26 +652,26 @@ class RegQPInteriorPointSolver:
     def set_initial_guess(self, qp, **kwargs):
         """
         Compute initial guess according the Mehrotra's heuristic. Initial values
-        of x are computed as the solution to the least-squares problem
+        of x are computed as the solution to the least-squares problem::
 
-        minimize ||s||  subject to  A1 x + A2 s = b
+            minimize ||s||  subject to  A1 x + A2 s = b
 
-        which is also the solution to the augmented system
+        which is also the solution to the augmented system::
 
-        [ 0   0   A1' ] [x]   [0]
-        [ 0   I   A2' ] [s] = [0]
-        [ A1  A2   0  ] [w]   [b].
+            [ 0   0   A1' ] [x]   [0]
+            [ 0   I   A2' ] [s] = [0]
+            [ A1  A2   0  ] [w]   [b].
 
         Initial values for (y,z) are chosen as the solution to the least-squares
-        problem
+        problem::
 
-        minimize ||z||  subject to  A1' y = c,  A2' y + z = 0
+            minimize ||z||  subject to  A1' y = c,  A2' y + z = 0
 
-        which can be computed as the solution to the augmented system
+        which can be computed as the solution to the augmented system::
 
-        [ 0   0   A1' ] [w]   [c]
-        [ 0   I   A2' ] [z] = [0]
-        [ A1  A2   0  ] [y]   [0].
+            [ 0   0   A1' ] [w]   [c]
+            [ 0   I   A2' ] [z] = [0]
+            [ A1  A2   0  ] [y]   [0].
 
         To ensure stability and nonsingularity when A does not have full row
         rank, the (1,1) block is perturbed to 1.0e-4 * I and the (3,3) block is
@@ -769,14 +768,14 @@ class RegQPInteriorPointSolver29(RegQPInteriorPointSolver):
         so that the scaled matrix has all its entries near 1.0 in the sense that
         the square of the sum of the logarithms of the entries is minimized.
 
-        In effect the original problem
+        In effect the original problem::
 
-        minimize c'x + 1/2 x'Qx subject to  A1 x + A2 s = b, x >= 0
+            minimize c'x + 1/2 x'Qx subject to  A1 x + A2 s = b, x >= 0
 
-        is converted to
+        is converted to::
 
-        minimize (Cc)'x + 1/2 x' (CQC') x
-        subject to  R A1 C x + R A2 C s = Rb, x >= 0,
+            minimize (Cc)'x + 1/2 x' (CQC') x
+            subject to  R A1 C x + R A2 C s = Rb, x >= 0,
 
         where the diagonal matrices R and C operate row and column scaling
         respectively.
