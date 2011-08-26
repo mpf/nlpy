@@ -670,7 +670,7 @@ class AmplModel(NLPModel):
                 wrong_sign = lC_wrong or uC_wrong
             if wrong_sign:
                 raise ValueError, 'Multipliers for inequalities must be >= 0.'
-            if not z >= 0:
+            if not np.all(z >= 0):
                 raise ValueError, 'Multipliers for bounds must be >= 0.'
 
         pFeas = self.primal_feasibility(x, c=c)
@@ -680,7 +680,8 @@ class AmplModel(NLPModel):
 
 
     def compute_scaling_obj(self, x=None, g_max=1.0e2, reset=False):
-        """Compute objective scaling.
+        """
+        Compute objective scaling.
 
         :parameters:
 
@@ -734,8 +735,8 @@ class AmplModel(NLPModel):
         # Remove scaling if requested
         if reset:
             self.scale_con = None
-            self.Lcon = self.model.get_Lcon()        # lower bounds on constraints
-            self.Ucon = self.model.get_Ucon()        # upper bounds on constraints
+            self.Lcon = self.model.get_Lcon()  # lower bounds on constraints
+            self.Ucon = self.model.get_Ucon()  # upper bounds on constraints
             return
 
         # Quick return if the problem is already scaled
@@ -778,13 +779,18 @@ class AmplModel(NLPModel):
 
     # The following methods mirror the module functions defined in _amplpy.c.
 
-    def obj(self, x):
+    def obj(self, x, obj_num=0):
         """
         Evaluate objective function value at x.
         Returns a floating-point number. This method changes the sign of the
         objective value if the problem is a maximization problem.
         """
-        f = self.model.eval_obj(x)
+
+        # AMPL doesn't exactly exit gracefully if obj_num is out of range.
+        if obj_num < 0 or obj_num >= self.model.n_obj:
+            raise ValueError, 'Objective number is out of range.'
+
+        f = self.model.eval_obj(x, obj_num)
         self.feval += 1
         if self.scale_obj:    f *= self.scale_obj
         if not self.minimize: f *= -1
@@ -1147,10 +1153,9 @@ class AmplModel(NLPModel):
         """
         Determines whether problem is a linear programming problem.
         """
-        if self.nlo or self.nlc or self.nlnc:
-            return True
-        else:
+        if self.model.nlo or self.model.nlc or self.model.nlnc:
             return False
+        return True
 
 
     def set_x(self,x):
