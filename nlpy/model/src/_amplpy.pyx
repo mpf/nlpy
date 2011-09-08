@@ -313,9 +313,9 @@ cdef class ampl:
         lin = range(self.nlc + self.nlnc, self.n_con)
         return (lin, nln, net)
 
-    def eval_obj(self, ndarray[np.double_t] x, obj_num):
+    def eval_obj(self, ndarray[np.double_t] x, obj_num=0):
         cdef:
-            int nerror
+            int nerror = 0
             double val
 
         # Ensure contiguous input.
@@ -374,7 +374,7 @@ cdef class ampl:
 
     def eval_ci(self, int i, ndarray[np.double_t] x):
         """Evaluate ith constraint."""
-        cdef double ci
+        cdef double ci = 0.0
         if i < 0 or i >= self.n_con:
             raise ValueError('Got i = %d; exected 0 <= i < %d' %
                              (i, self.n_con))
@@ -672,7 +672,7 @@ cdef class ampl:
         # of x, or to call Set_x again with an updated value of x.
 
         # Ensure contiguous input.
-        if not PyArray_ISCARRAY(g): g = g.copy()
+        if not PyArray_ISCARRAY(x): x = x.copy()
 
         ampl_xknown(self.asl, <double*>x.data)
 
