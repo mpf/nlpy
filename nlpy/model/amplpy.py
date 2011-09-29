@@ -191,7 +191,7 @@ class AmplModel(NLPModel):
         self.stop_c = 1.0e-5    # Complementarty
         self.stop_p = 1.0e-5    # Primal feasibility
 
-        # Initializze scaling attributes
+        # Initialize scaling attributes
         self.scale_obj = None   # Objective scaling
         self.scale_con = None   # Constraint scaling
 
@@ -712,7 +712,7 @@ class AmplModel(NLPModel):
 
         return gNorm
 
-    def compute_scaling_con(self, x=None, g_max=1.0e2, reset=False):
+    def compute_scaling_cons(self, x=None, g_max=1.0e2, reset=False):
         """
         Compute constraint scaling.
 
