@@ -6,6 +6,7 @@ from lsqr    import *
 from lbfgs   import *
 from ldfp    import *
 from trunk   import *
+from tron    import *
 from lp      import *
 from cqp     import *
 from funnel  import *

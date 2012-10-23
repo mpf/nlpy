@@ -1,0 +1,8 @@
+#!/bin/bash
+
+FC=gfortran
+FC_LIBDIR=`$FC -print-file-name=libgfortran.a 2>&1 | sed -n '1s/\/*libgfortran\.a//p'`
+FC_LIBDIR2=`$FC -print-file-name=libgfortranbegin.a 2>&1 | sed -n '1s/\/*libgfortranbegin\.a//p'`
+FLIBS="-L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"
+
+f2py --verbose -c dtron.pyf -m pytron ~/local/Solvers/tron/src/tron/d-i386.a ~/local/Solvers/tron/src/utils/d-i386.a --link-blas_opt $FLIBS
